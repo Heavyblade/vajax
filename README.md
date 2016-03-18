@@ -121,30 +121,30 @@ Petición para descargar una imagen y almacenarla en tabla:
 importClass( "VImage" );
 
 $.ajax({
-	type: "GET",
-	responseType: "arraybuffer",
-	url : "http://i.emezeta.com/cache/img/1398_o.jpg",
-	success: function(data, status, composeURL) {
-			  		if ( theRoot.beginTrans( "Añadir imagen" ) ) {
+  type: "GET",
+  responseType: "arraybuffer",
+  url : "http://i.emezeta.com/cache/img/1398_o.jpg",
+  success: function(data, status, composeURL) {
+      if ( theRoot.beginTrans( "Añadir imagen" ) ) {
 
-									var respuestaBA  = new VByteArray();
-										respuestaBA    = data;
-										respuesta      = respuestaBA
+          var respuestaBA  = new VByteArray();
+          respuestaBA    = data;
+          respuesta      = respuestaBA
 
-									var image = new VImage();
-                  image.loadFromData(respuestaBA, "JPG");
+          var image = new VImage();
+          image.loadFromData(respuestaBA, "JPG");
 
-                  var grafico = new VRegister(theRoot);
-									grafico.setTable("dat/GRAFICAS");
+          var grafico = new VRegister(theRoot);
+          grafico.setTable("dat/GRAFICAS");
 
-                  grafico.setFieldImage("FOTO", image);
-								  grafico.setField("NAME", "Hola mundo");
+          grafico.setFieldImage("FOTO", image);
+          grafico.setField("NAME", "Hola mundo");
 
-									// Se guarda el registro				
-									grafico.addRegister()
-									theRoot.commitTrans();
-					}
-	}
+          // Se guarda el registro				
+          grafico.addRegister()
+          theRoot.commitTrans();
+      }
+  }
 });
 ```
 
