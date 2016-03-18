@@ -38,6 +38,7 @@ error | Función que se llamara si hay algun error con el request o si el servid
 Simple petición GET:
 ```javascript
 #include "(CurrentProject)/ajax.js"
+
 $.ajax({
   type: "GET",
   url: "http://github.com/heavyblade.json",
@@ -56,6 +57,7 @@ Petición POST simple:
 
 ```javascript
 #include "(CurrentProject)/ajax.js"
+
 $.ajax({
   type: "POST",
   url: "http://github.com/heavyblade.json",
@@ -74,6 +76,7 @@ Petición post con JSON en el body:
 
 ```javascript
 #include "(CurrentProject)/ajax.js"
+
 $.ajax({
   type: "POST",
   url: "http://github.com/heavyblade.json",
@@ -93,6 +96,7 @@ Petición para descargar un archivo:
 
 ```javascript
 #include "(CurrentProject)/ajax.js"
+
 $.ajax({
 	type: "POST",
 	responseType: "arraybuffer",
@@ -144,10 +148,11 @@ $.ajax({
 });
 ```
 
-Petición multipart para subida de archivos
+Petición multipart para subida de archivos, para este caso solo basta con que los parametros que representarán archivos sean un objeto que indique que el tipo es "file" y el path del archivo que debe ir incluido en el request.
 
 ```javascript
 #include "(CurrentProject)/ajax.js"
+
 $.ajax({
   type: "POST",
   url: "http://some_cloud.com/api/upload",
