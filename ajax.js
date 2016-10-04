@@ -60,21 +60,32 @@ function buildMultipartByteArray(fields) {
 			value  = fields[item],
 		    header = ("Content-Disposition: form-data; name=\"" + item + "\"").toVByteArray();
 
-		if ( whatIsIt(value) === "Object" ) {
+		if ( whatIsIt(value) === "Object" && value.path !== undefined ) {
 			var path 	   = value.path,
 			    file       = readFile(path),
 			    headerFile = ("Content-Disposition: form-data; name=\"" + item + "\"; filename=\"" + file.name + "\"").toVByteArray(),
 			    headerType = "Content-Type: application/octet-stream".toVByteArray();
 
-			baseArray.append(boundaryStart);
-			baseArray.append(crlf);
-			baseArray.append(headerFile);
-			baseArray.append(crlf);
-			baseArray.append(headerType);
-			baseArray.append(crlf);
-			baseArray.append(crlf);
-			baseArray.append(file.array);
-			baseArray.append(crlf);
+    			baseArray.append(boundaryStart);
+    			baseArray.append(crlf);
+    			baseArray.append(headerFile);
+    			baseArray.append(crlf);
+    			baseArray.append(headerType);
+    			baseArray.append(crlf);
+    			baseArray.append(crlf);
+    			baseArray.append(file.array);
+    			baseArray.append(crlf);
+
+    } else if ( whatIsIt(value) === "Object" ) {
+
+          header = "Content-Type: application/json".toVByteArray();
+          baseArray.append(boundaryStart);
+          baseArray.append(crlf);
+          baseArray.append(header);
+          baseArray.append(crlf);
+          baseArray.append(crlf);
+          baseArray.append((JSON.stringify(value)).toVByteArray());
+          baseArray.append(crlf);
 
 		} else if ( whatIsIt(value) === "Array" ) {
 			var x = value.length;
