@@ -92,6 +92,27 @@ $.ajax({
 })
 ```
 
+Petición POST con xml en el body:
+
+
+```javascript
+#include "(CurrentProject)/ajax.js"
+
+$.ajax({
+  type: "POST",
+  url: "http://someurl.com/xml_end_point",
+  body: "<person><name>John Doe</name></person>"
+  headers: {"Content-Type": "application/xml"},
+  responseType: "arraybuffer",
+  success: function(data, http_status) {
+          // Some of your code here !
+  },
+  error: function(data, http_status) {
+          // Some of your code here !
+  }
+})
+```
+
 Petición para descargar un archivo:
 
 ```javascript
