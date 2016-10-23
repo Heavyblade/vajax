@@ -128,13 +128,14 @@ function isMultipart(data) {
 
 $ = {ajax: function(options) {
 		var data    = options.data || {},
-			headers = options.headers || {},
-			url     = "",
+				headers = options.headers || {},
+				url     = "",
 		    body    = null,
-		    xhr     = new XMLHttpRequest();
+		    xhr     = new XMLHttpRequest(),
+				i;
 
 		function jsonToParams(json) {
-			var params = [];
+			var params = [], i;
 			for ( i in json ) {
 				if ( whatIsIt(json[i]) == "Array" ) {
 					var values = json[i],
@@ -166,8 +167,12 @@ $ = {ajax: function(options) {
 			if ( options.body ) {
 				body = options.body;
 				headers["Content-Length"] = options.body.length;
-				headers["Content-Type"]   = "application/octet-stream";
+
+				if ( headers["Content-Type"] === undefined ) {
+						headers["Content-Type"]  = "application/octet-stream";
+				}
 			}
+
 		} else {
 			url  = options.url + "?" + jsonToParams(options.data);
 		}
