@@ -113,6 +113,35 @@ $.ajax({
 })
 ```
 
+Petición con redirección:
+
+```javascript
+#include "(CurrentProject)/ajax.js"
+
+$.ajax({type:         "GET",
+        url:          "http://someurl.com/page",
+        headers:      {"Content-Type": "application/json"},
+        responseType: "json",
+        success:      function(data, http_status) {
+                          // Some of your code here !
+        },
+        error:        function(data, http_status) {
+                          // Some of your code here !
+        },
+        redirect_to:  function(url, headers) {
+                        $.ajax({type:         "GET",
+                                url:          url,
+                                headers:      headers.cookies,
+                                responseType: "json",
+                                redirect_to:  function(url, headers) {
+
+                                }
+                        });
+        }
+});
+
+```
+
 Petición para descargar un archivo:
 
 ```javascript

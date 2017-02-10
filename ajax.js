@@ -187,6 +187,11 @@ $ = {ajax: function(options) {
 							if ( options.success && typeof(options.success) == "function" ) {
 								options.success(xhr.response, xhr.status,url);
 							}
+            } else if( parseInt(xhr.status) == 302 ) {
+              var stringHeaders = xhr.getAllResponseHeaders(),
+                  jsonHeaders   = getHeaders(stringHeaders);
+
+                  options.redirect_to(jsonHeaders.Location, jsonHeaders);
 						} else {
 							if ( options.error && typeof(options.error) == "function" ) {
 								options.error(xhr.response, xhr.status,url);
