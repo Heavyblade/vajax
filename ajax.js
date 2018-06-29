@@ -22,10 +22,9 @@ String.prototype.toVByteArray = function() {
 };
 
 Number.prototype.toVByteArray = function() {
-	var bytex  = new VByteArray();
-		bytex.setText(this.valueOf().toString());
-
-	return(bytex);
+  var bytex  = new VByteArray();
+  bytex.setText(this.valueOf().toString());
+  return(bytex);
 };
 
 function whatIsIt(object) {
@@ -126,6 +125,15 @@ function isMultipart(data) {
 	  return(false);
 }
 
+function getHeaders(headersString) {
+	var header_regx = /(.+): (.+)/g,
+		jsonHeaders = {};
+	
+	while(header = header_regx.exec(headersString)) { jsonHeaders[header[1]] = header[2];}
+	
+	return jsonHeaders;
+}
+
 $ = {ajax: function(options) {
 		var data    = options.data || {},
 				headers = options.headers || {},
@@ -142,7 +150,7 @@ $ = {ajax: function(options) {
 						z      = values.length;
 					for( x=0; x < z; x++ ) { params.push("" + i + "[]" + "=" + values[x]); }
 				} else {
-					params.push(i+ "=" + json[i]);
+					params.push(encodeURIComponent(i)+ "=" + encodeURIComponent(json[i]));
 				}
 			}
 			return params.join("&");
@@ -185,13 +193,16 @@ $ = {ajax: function(options) {
 				case 4:
 						if ( parseInt(xhr.status) > 199 && parseInt(xhr.status) < 300 ){
 							if ( options.success && typeof(options.success) == "function" ) {
-								options.success(xhr.response, xhr.status,url);
+								var stringHeaders = xhr.getAllResponseHeaders(),
+								jsonHeaders = getHeaders(stringHeaders);
+								options.success(xhr.response, xhr.status, jsonHeaders, url);
 							}
-            } else if( parseInt(xhr.status) == 302 ) {
-              var stringHeaders = xhr.getAllResponseHeaders(),
-                  jsonHeaders   = getHeaders(stringHeaders);
-
-                  options.redirect_to(jsonHeaders.Location, jsonHeaders);
+						} else if( parseInt(xhr.status) == 302 ) {
+							var stringHeaders = xhr.getAllResponseHeaders(),
+							jsonHeaders = getHeaders(stringHeaders);
+							if ( options.redirect_to && typeof(options.redirect_to) === "function" ) {
+								options.redirect_to(jsonHeaders.Location, jsonHeaders);
+							}
 						} else {
 							if ( options.error && typeof(options.error) == "function" ) {
 								options.error(xhr.response, xhr.status,url);
@@ -200,6 +211,7 @@ $ = {ajax: function(options) {
 						break;
 			}
 		};
+
 		xhr.open(options.type.toUpperCase(), url, options.async || true);
 		for (i in headers) { xhr.setRequestHeader(i, headers[i]); }
 		if ( body ) { xhr.send(body); } else { xhr.send(); }
