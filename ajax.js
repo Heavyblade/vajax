@@ -22,9 +22,9 @@ String.prototype.toVByteArray = function() {
 };
 
 Number.prototype.toVByteArray = function() {
-  var bytex  = new VByteArray();
-  bytex.setText(this.valueOf().toString());
-  return(bytex);
+	var bytex  = new VByteArray();
+	bytex.setText(this.valueOf().toString());
+	return(bytex);
 };
 
 function whatIsIt(object) {
@@ -126,11 +126,25 @@ function isMultipart(data) {
 }
 
 function getHeaders(headersString) {
-	var header_regx = /(.+): (.+)/g,
-		jsonHeaders = {};
-	
-	while(header = header_regx.exec(headersString)) { jsonHeaders[header[1]] = header[2];}
-	
+	var headers = headersString.split("\n"),
+		z       = headers.length,
+		jsonHeaders = {},
+		header, currentKey;
+		
+	for (i=0; i < z; i++) {
+		header 	  = headers[i];
+		extracted = header.match(/(.+): (.+)/);
+		
+		if ( extracted ) {
+			currentKey = extracted[1];
+			jsonHeaders[currentKey] = extracted[2];
+		} else {
+			if ( typeof(jsonHeaders[currentKey]) === "string" ) {
+				jsonHeaders[currentKey] = [jsonHeaders[currentKey]];
+			}
+			jsonHeaders[currentKey].push(header);
+		}
+	}
 	return jsonHeaders;
 }
 
@@ -191,6 +205,7 @@ $ = {ajax: function(options) {
 		xhr.onreadystatechange = function() {
 			switch(xhr.readyState) {
 				case 4:
+
 						if ( parseInt(xhr.status) > 199 && parseInt(xhr.status) < 300 ){
 							if ( options.success && typeof(options.success) == "function" ) {
 								var stringHeaders = xhr.getAllResponseHeaders(),
