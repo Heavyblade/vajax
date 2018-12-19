@@ -150,11 +150,12 @@ function getHeaders(headersString) {
 
 $ = {ajax: function(options) {
 		var data    = options.data || {},
-				headers = options.headers || {},
-				url     = "",
+		    headers = options.headers || {},
+		    url     = "",
 		    body    = null,
 		    xhr     = new XMLHttpRequest(),
-				i;
+		    i,
+		    async = options.async == undefined ? true : options.async;
 
 		function jsonToParams(json) {
 			var params = [], i;
@@ -227,9 +228,11 @@ $ = {ajax: function(options) {
 			}
 		};
 
-		xhr.open(options.type.toUpperCase(), url, options.async || true);
+		xhr.open(options.type.toUpperCase(), url, async);
 		for (i in headers) { xhr.setRequestHeader(i, headers[i]); }
 		if ( body ) { xhr.send(body); } else { xhr.send(); }
-		while(xhr.readyState != 4) { xhr.processEvents(); }
+		if (async) {
+			while(xhr.readyState != 4) { xhr.processEvents(); }
+		}
 	}
 };
