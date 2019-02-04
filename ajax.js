@@ -27,6 +27,18 @@ Number.prototype.toVByteArray = function() {
 	return(bytex);
 };
 
+function byteLength(str) {
+  // returns the byte length of an utf8 string
+  var s = str.length;
+  for (var i=str.length-1; i>=0; i--) {
+    var code = str.charCodeAt(i);
+    if (code > 0x7f && code <= 0x7ff) s++;
+    else if (code > 0x7ff && code <= 0xffff) s+=2;
+    if (code >= 0xDC00 && code <= 0xDFFF) i--; //trail surrogate
+  }
+  return s;
+}
+
 function whatIsIt(object) {
 	var stringConstructor = "test".constructor;
 	var arrayConstructor = [].constructor;
@@ -188,7 +200,7 @@ $ = {ajax: function(options) {
 			}
 			if ( options.body ) {
 				body = options.body;
-				headers["Content-Length"] = options.body.length;
+				headers["Content-Length"] = byteLength(options.body);
 
 				if ( headers["Content-Type"] === undefined ) {
 						headers["Content-Type"]  = "application/octet-stream";
