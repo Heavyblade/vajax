@@ -256,7 +256,15 @@ $ = {ajax: function(options) {
 		};
 
 		xhr.open(options.type.toUpperCase(), url, options.async || true);
-		for (i in headers) { xhr.setRequestHeader(i, headers[i]); }
+    for (i in headers) {
+      var h_value = headers[i];
+      if (whatIsIt(h_value) === "Array") {
+        _.each(value, function(val) { xhr.setRequestHeader(i, val); });
+      } else {
+        xhr.setRequestHeader(i, h_value);
+      }
+    }
+
 		if ( body ) { xhr.send(body); } else { xhr.send(); }
 		while(xhr.readyState != 4) { xhr.processEvents(); }
 	},
@@ -377,16 +385,16 @@ _ = {
 
 			for( var i=0; i < z; i++ ) {
 				item = array[i];
-				if ( filter(array[i]) ) { return(item); } 
+				if ( filter(array[i]) ) { return(item); }
 			}
-			return(null);		
+			return(null);
 	},
 	each: function(array, callback) {
 			var x = [],
 				z = array.length,
 				record;
 
-			for( var i=0; i < z; i++ ) { callback(array[i]); }
+			for( var i=0; i < z; i++ ) { callback(array[i],i); }
 	},
 	map: function(array, callback) {
 			var x = [],
