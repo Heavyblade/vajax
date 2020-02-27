@@ -259,7 +259,7 @@ $ = {ajax: function(options) {
     for (i in headers) {
       var h_value = headers[i];
       if (whatIsIt(h_value) === "Array") {
-        _.each(value, function(val) { xhr.setRequestHeader(i, val); });
+        _.each(h_value, function(val) { xhr.setRequestHeader(i, val); });
       } else {
         xhr.setRequestHeader(i, h_value);
       }
