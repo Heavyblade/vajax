@@ -393,14 +393,14 @@ _ = {
 			var x = [],
 				z = array.length,
 				record;
-
-			for( var i=0; i < z; i++ ) { callback(array[i],i); }
+		
+			for( var i=0; i < z; i++ ) { callback(array[i]); }
 	},
 	map: function(array, callback) {
 			var x = [],
 				z = array.length,
 				record;
-
+		
 			for( var i=0; i < z; i++ ) {x.push(callback(array[i])); }
 			return x;
 	},
@@ -408,13 +408,13 @@ _ = {
 			var x = [],
 				z = array.length,
 				record;
-
+		
 			for( var i=0; i < z; i++ ) {
 				record = array[i];
 				if ( callback(record, i) ) { x.push(record); } 
 			}
 			return(x);
-	},
+	}, 
 	findVRegisterList: function(vregisterlist, filter) {
 			var z 	   = vregisterlist.listSize(),
 				record = undefined;
@@ -453,7 +453,7 @@ _ = {
 				record = vregisterlist.readAt(i);
 				memo   = callback(record, memo, i);
 			}
-
+			
 			return(memo);
 	},
 	reduce: function(array, memo, callback) {
